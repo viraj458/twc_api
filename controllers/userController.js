@@ -7,9 +7,9 @@ const createToken = (id) => {
     return jwt.sign({id}, process.env.SECRET, { expiresIn: '3d' })
 }
 
+//signup method
 const signup = async(email, password) =>{
-    console.log(email)
-    console.log(password)
+
     if (!email || !password) {
       throw Error('All fields must be filled')
     }
@@ -22,7 +22,6 @@ const signup = async(email, password) =>{
     }
 
   
-    
     const exists = await db('users').where({ email }).first()
   
     if (exists) {
@@ -44,12 +43,54 @@ const signup = async(email, password) =>{
         const {email, password} = req.body
         const user = await signup(email, password)
         // create a token
-      const token = createToken(user.id)
+        const token = createToken(user.id)
         res.status(200).json({email, token})
     } catch (err) {
       res.status(400).json({error: err.message})
     }
 }
+
+
+
+//login method
+const login = async(email, password) => {
+
+    if (!email || !password) {
+        throw Error('All fields must be filled')
+      }
+    
+      const user = await db('users').where({ email }).first()
+      if (!user) {
+        throw Error('Incorrect email')
+      }
+    
+      const match = await bcrypt.compare(password, user.password)
+      if (!match) {
+        throw Error('Incorrect password')
+      }
+    
+      return user
+}
+
+
+// login controller
+const loginUser = async (req, res) => {
+    
+  
+    try {
+        const {email, password} = req.body
+        const user = await login(email, password) 
+         
+        // create a token
+        const token = createToken(user.id)
+  
+        res.status(200).json({email, token})
+    } catch (error) {
+      res.status(400).json({error: error.message})
+    }
+  }
+
 module.exports = {
-    signupUser
+    signupUser,
+    loginUser
 }
