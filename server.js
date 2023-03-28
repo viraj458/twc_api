@@ -3,6 +3,7 @@ const db = require("./db")
 require('dotenv').config()
 
 const userRoute = require('./routes/userRoute')
+const contactRoute = require('./routes/contactRoute')
 
 //creating express app
 const app = express()
@@ -19,6 +20,7 @@ app.get("/",(req,res)=>{
   
 //routes
 app.use('/user', userRoute)
+app.use('/contact', contactRoute)
 
 app.listen(port, () => {
  console.log(`Listening on port: ${port}`);
