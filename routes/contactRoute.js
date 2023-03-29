@@ -1,5 +1,5 @@
 const express = require('express')
-const { createContact, getContacts, deleteContact } = require('../controllers/contactController')
+const { createContact, getContacts, deleteContact, updateContact } = require('../controllers/contactController')
 const auth = require('../middlewares/auth')
 
 const router = express.Router()
@@ -17,5 +17,8 @@ router.get('/', getContacts)
 
 //delete a contact
 router.delete('/:id', deleteContact)
+
+//update a contact
+router.put('/:id', updateContact)
 
 module.exports = router
