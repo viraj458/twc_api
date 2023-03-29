@@ -18,6 +18,20 @@ const createContact = async(req, res) => {
     }
 }
 
+//get contacts
+const getContacts = async(req, res) => {
+    try {
+        const user_id = req.user.id
+        // const contacts = await Contact.find({user_id}).sort({createdAt: -1})
+        const contacts = await db('contacts').where({user_id}).select('*')
+
+        res.status(200).json(contacts)
+    } catch (err) {
+        res.status(400).json({error:err.message})
+    }
+}
+
 module.exports = {
-    createContact
+    createContact,
+    getContacts
 }

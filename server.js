@@ -20,7 +20,7 @@ app.get("/",(req,res)=>{
   
 //routes
 app.use('/user', userRoute)
-app.use('/contact', contactRoute)
+app.use('/contacts', contactRoute)
 
 app.listen(port, () => {
  console.log(`Listening on port: ${port}`);

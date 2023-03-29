@@ -1,5 +1,5 @@
 const express = require('express')
-const { createContact } = require('../controllers/contactController')
+const { createContact, getContacts } = require('../controllers/contactController')
 const auth = require('../middlewares/auth')
 
 const router = express.Router()
@@ -9,5 +9,8 @@ router.use(auth)
 
 //create a contact
 router.post('/', createContact)
+
+//get contacts
+router.get('/', getContacts)
 
 module.exports = router
