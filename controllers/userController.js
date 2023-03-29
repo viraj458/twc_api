@@ -9,7 +9,6 @@ const createToken = (id) => {
 
 //signup method
 const signup = async(email, password) =>{
-
     if (!email || !password) {
       throw Error('All fields must be filled')
     }
@@ -31,8 +30,9 @@ const signup = async(email, password) =>{
     const salt = await bcrypt.genSalt(10)
     const hash = await bcrypt.hash(password, salt)
   
-    const user = await db('users').insert({ email, password: hash })
-  
+    const [user] = await db('users').insert({ email, password: hash })
+
+    console.log(user);
     return user
   }
 
@@ -42,8 +42,9 @@ const signup = async(email, password) =>{
     try {
         const {email, password} = req.body
         const user = await signup(email, password)
+        console.log(user);
         // create a token
-        const token = createToken(user.id)
+        const token = createToken(user)
         res.status(200).json({email, token})
     } catch (err) {
       res.status(400).json({error: err.message})
@@ -68,7 +69,6 @@ const login = async(email, password) => {
       if (!match) {
         throw Error('Incorrect password')
       }
-    
       return user
 }
 
